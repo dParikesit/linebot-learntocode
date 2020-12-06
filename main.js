@@ -12,7 +12,9 @@ const app = express();
 app.use(middleware(config))
 
 app.post('/webhook', middleware(config), (req, res) => {
+    req.body.events
+    req.body.destination
     res.status(200)
-  })
+})
 
 app.listen(8080)
