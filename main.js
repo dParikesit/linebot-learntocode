@@ -15,12 +15,12 @@ const client = new line.Client(config)
 
 const app = express();
 
+app.use(bodyParser.urlencoded(json))
 app.post('/webhook', middleware(config), (req, res) => {
-    const body = JSON.stringify(req.body)
     const signature = crypto
       .createHmac('SHA256', channelSecret)
       .update(body).digest('base64');
-    line.validateSignature(body,config.channelSecret,signature)
+    line.validateSignature(req.body,config.channelSecret,signature).valueOf(true)
     if(req.body.events.length()==0){
         res.send(200)
     }
