@@ -17,6 +17,7 @@ app.use(middleware(config))
 
 app.post('/webhook', middleware(config), (req, res) => {
     const check = req.headers["X-Line-Signature"]; // Request body string
+    console.log("check = ",check)
     const signature = crypto
       .createHmac('SHA256', channelSecret)
       .update(check).digest('base64');
