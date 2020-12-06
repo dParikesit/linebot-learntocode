@@ -1,0 +1,23 @@
+{
+  "name": "linebot-learntocode",
+  "version": "1.0.0",
+  "description": "An app for learning about line bot",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dParikesit/linebot-learntocode.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dParikesit/linebot-learntocode/issues"
+  },
+  "homepage": "https://github.com/dParikesit/linebot-learntocode#readme",
+  "dependencies": {
+    "@line/bot-sdk": "^7.1.0",
+    "express": "^4.17.1"
+  }
+}
