@@ -1,7 +1,7 @@
 'use strict'
 
 const express = require('express')
-const line = requrie('@line/bot-sdk')
+const line = require('@line/bot-sdk')
 const crypto = require('crypto')
 const config = {
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
