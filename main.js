@@ -16,10 +16,9 @@ const app = express();
 app.use(middleware(config))
 
 app.post('/webhook', middleware(config), (req, res) => {
-    Promise
-        if (req.body.events == []) {
-            res.statusCode(200)
-        }
+    if (req.body.events.length==0) {
+        res.statusCode(200)
+    }
 })
 
 function handleEvent(event) {
