@@ -16,6 +16,10 @@ const app = express();
 app.use(middleware(config))
 
 app.post('/webhook', middleware(config), (req, res) => {
+    const body = req.body; // Request body string
+    const signature = crypto
+      .createHmac('SHA256', channelSecret)
+      .update(body).digest('base64');
     if (req.body.events.length==0) {
         res.statusCode(200)
     }
