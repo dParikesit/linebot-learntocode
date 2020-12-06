@@ -17,12 +17,9 @@ app.use(middleware(config))
 
 app.post('/webhook', middleware(config), (req, res) => {
     Promise
-        .all(req.body.events.map(handleEvent))
-        .then((result) => res.json(result))
-        .catch((err)=>{
-            console.error(err);
-            res.status(500).end();
-        });
+        if (req.body.events == []) {
+            res.statusCode(200)
+        }
 })
 
 function handleEvent(event) {
