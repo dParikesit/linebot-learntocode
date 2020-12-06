@@ -4,8 +4,8 @@ const express = require('express')
 const line = requrie('@line/bot-sdk')
 const crypto = require('crypto')
 const config = {
-    channelAccessToken: process.env.accessToken,
-    channelSecret: process.env.secret
+    channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
+    channelSecret: process.env.CHANNEL_SECRET
 }
 
 const middleware = line.middleware
@@ -39,7 +39,7 @@ function handleEvent(event) {
   }
 
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`listening on ${port}`);
 });

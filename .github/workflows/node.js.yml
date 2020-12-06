@@ -23,8 +23,8 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       env:
-        accessToken: ${{ secrets.CHANNEL_ACCESS_TOKEN }}
-        secret: ${{ secrets.CHANNEL_SECRET }}
+        CHANNEL_ACCESS_TOKEN: ${{ secrets.CHANNEL_ACCESS_TOKEN }}
+        CHANNEL_SECRET: ${{ secrets.CHANNEL_SECRET }}
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
