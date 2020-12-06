@@ -16,12 +16,20 @@ const app = express();
 app.use(middleware(config))
 
 app.post('/webhook', middleware(config), (req, res) => {
-    const body = req.body; // Request body string
+    const check = req.headers["X-Line-Signature"]; // Request body string
     const signature = crypto
       .createHmac('SHA256', channelSecret)
-      .update(body).digest('base64');
+      .update(check).digest('base64');
     if (req.body.events.length==0) {
         res.statusCode(200)
+    } else{
+        Promise
+            .all(req.body.events.map(handleEvent))
+            .then((result) => res.json(result))
+            .catch((err) =>{
+                console.error(err);
+                res.status(500).end();
+            })
     }
 })
 
