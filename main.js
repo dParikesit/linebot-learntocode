@@ -11,8 +11,8 @@ const config = {
 const app = express();
 app.use(middleware(config))
 
-app.post('/webhook', (req, res) => {
+app.post('/webhook', middleware(config), (req, res) => {
     res.status(200)
-})
+  })
 
 app.listen(8080)
