@@ -43,7 +43,7 @@ function handleEvent(event) {
       const message = event.message;
       switch (message.type) {
         case 'text':
-          return handleText(message, event.replyToken);
+          return replyText(event.replyToken, event.userId);
         case 'image':
           return handleImage(message, event.replyToken);
         case 'video':
