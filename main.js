@@ -43,8 +43,11 @@ function handleEvent(event) {
       const message = event.message;
       switch (message.type) {
         case 'text':
-          if(event.message.text=='asu'){
+          if(event.message.text[0]=='!'){
             return replyText(event.replyToken, 'apaan sih');
+          }
+          else{
+            return handleText(message, event.replyToken)
           }
         case 'image':
           return handleImage(message, event.replyToken);
