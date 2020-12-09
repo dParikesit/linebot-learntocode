@@ -2,11 +2,26 @@
 
 const express = require('express')
 const line = require('@line/bot-sdk')
+const client = new line.Client(config)
+const fs = require('fs')
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
   channelSecret: process.env.CHANNEL_SECRET
 }
-const client = new line.Client(config)
+
+const firebase = require('firebase/app')
+require('firebase/storage')
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_PROJECT_ID + ".firebaseapp.com",
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_PROJECT_ID + ".appspot.com",
+    messagingSenderId: process.env.FIREBASE_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: "G-" + process.env.FIREBASE_MEASUREMENT_ID
+};
+firebase.initializeApp(firebaseConfig)
 
 const app = express();
 
@@ -47,18 +62,10 @@ function handleEvent(event) {
             return replyText(event.replyToken, 'apaan sih');
           }
           else{
-            return handleText(message, event.replyToken)
+            throw new Error(`Unknown message`);
           }
-        case 'image':
-          return handleImage(message, event.replyToken);
-        case 'video':
-          return handleVideo(message, event.replyToken);
-        case 'audio':
-          return handleAudio(message, event.replyToken);
-        case 'location':
-          return handleLocation(message, event.replyToken);
-        case 'sticker':
-          return handleSticker(message, event.replyToken);
+        case 'file':
+          return handleFile(message, event.replyToken);
         default:
           throw new Error(`Unknown message: ${JSON.stringify(message)}`);
       }
@@ -88,28 +95,30 @@ function handleEvent(event) {
   }
 }
 
-function handleText(message, replyToken) {
-  return replyText(replyToken, message.text);
-}
-
-function handleImage(message, replyToken) {
-  return replyText(replyToken, 'Got Image');
-}
-
-function handleVideo(message, replyToken) {
-  return replyText(replyToken, 'Got Video');
-}
-
-function handleAudio(message, replyToken) {
-  return replyText(replyToken, 'Got Audio');
-}
-
-function handleLocation(message, replyToken) {
-  return replyText(replyToken, 'Got Location');
-}
-
-function handleSticker(message, replyToken) {
-  return replyText(replyToken, 'Got Sticker');
+function handleFile(message, replyToken){
+  try {
+    const storageRef = firebase.storage().ref()
+    var file = fs.createWriteStream("./" + message.fileName)
+    var metadata = {
+      contentType: message.type
+    }
+    client.getMessageContent(message.id)
+      .then((stream) => {
+        stream.on('data', (chunk) => {
+          chunk.pipe(file);
+        })
+        stream.on('error', (err) => {
+          return replyText(replyToken, 'File download error!')
+        })
+        storageRef.child(message.fileName).put(file)
+      })
+  }
+  catch {
+    return replyText(replyToken, "File Transfer Error")
+  }
+  finally {
+    return replyText(replyToken, "Success")
+  }
 }
 
 const port = process.env.PORT;
