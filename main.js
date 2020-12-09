@@ -61,13 +61,10 @@ function handleEvent(event) {
           if(event.message.text[0]=='!'){
             return replyText(event.replyToken, 'apaan sih');
           }
-          else{
-            throw new Error(`Unknown message`);
-          }
         case 'file':
           return handleFile(message, event.replyToken);
         default:
-          throw new Error(`Unknown message: ${JSON.stringify(message)}`);
+          return replyText(event.replyToken, 'Unknown message');
       }
 
     case 'follow':
@@ -91,7 +88,7 @@ function handleEvent(event) {
       return replyText(event.replyToken, `${event.beacon.type} beacon hwid : ${event.beacon.hwid} with device message = ${dm}`);
 
     default:
-      throw new Error(`Unknown event: ${JSON.stringify(event)}`);
+      return replyText(event.replyToken, 'Unknown message');
   }
 }
 
